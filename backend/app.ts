@@ -1,6 +1,10 @@
 import express from "express";
 import mongoose from "mongoose";
 import router from "./controllers";
+import cors from "cors";
+import helmet from "helmet";
+import bodyParser from "body-parser";
+import handleError from "./middlewares/error-handler";
 
 // TODO Allow Restaurant owners to register their restaurants, registration details include Name, Address , Geo Location. Operation Timings, Contact Numbers.
 // TODO Allow Restaurant owners to publish their menu.
@@ -16,6 +20,13 @@ mongoose.connect("mongodb://localhost:27017/todo", {}, () => {
 });
 
 app.use(router);
+
+// middleware
+app.use(cors());
+app.use(helmet());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(handleError);
 
 app.listen(port, () => {
   console.log(
