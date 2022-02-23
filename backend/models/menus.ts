@@ -8,35 +8,36 @@ const foodItemSchema = new Schema({
   description: String,
   archive: Boolean,
   available: Boolean,
-  ratingRecord: Array<Number>
+  ratingRecord: [Number],
 });
 
-const menuSchema = new Schema({
-  item: [foodItemSchema],
-  restaurant: { type: Types.ObjectId, ref: "restaurants" },
-},
-{
+const menuSchema = new Schema(
+  {
+    item: [foodItemSchema],
+    restaurant: { type: Types.ObjectId, ref: "restaurants" },
+  },
+  {
     toJSON: {
-        virtuals: true,
-        getters: true
-    }
-}
+      virtuals: true,
+      getters: true,
+    },
+  }
 );
 
-foodItemSchema.virtual("rating").get(function() {
-    return findAverage(this.ratingRecord)
-})
-
-foodItemSchema.virtual("numberOfRatings").get(function() {
-    return this.ratingRecord.length
-})
-
-menuSchema.index({
-  restaurant: 1,
+foodItemSchema.virtual("rating").get(function () {
+  return findAverage(this.ratingRecord);
 });
+
+foodItemSchema.virtual("numberOfRatings").get(function () {
+  return this.ratingRecord.length;
+});
+
+// menuSchema.index({
+//   restaurant: 1,
+// });
 
 const Menus = model<IMenu & Document>("menus", menuSchema);
 
-Menus.createIndexes();
+// Menus.createIndexes();
 
 export default Menus;

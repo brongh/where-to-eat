@@ -1,12 +1,12 @@
 export interface IRestaurants {
-  _id: string;
+  _id?: string;
   name: string;
   contactNumber: string;
   address: addressDetails;
-  operatingHours: string;
-  ratingRecord: number[];
-  createdAt: string;
-  updatedAt: string;
+  operatingHours?: string;
+  ratingRecord?: number[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface addressDetails {
