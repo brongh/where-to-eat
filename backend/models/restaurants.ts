@@ -13,8 +13,17 @@ const restaurantSchema = new Schema(
       building: { type: String },
       block: { type: String },
       unit: { type: String },
-      longitude: { type: Number, required: true },
-      latitude: { type: Number, required: true },
+      location: {
+        type: {
+          type: String,
+          enum: ["Point"],
+          default: "Point",
+        },
+        coordinates: {
+          type: [Number],
+          default: [0, 0],
+        },
+      },
     },
   },
   {
@@ -53,13 +62,13 @@ const autoPopulateRestaurant = function (next: any) {
   next();
 };
 
-restaurantSchema.pre("findOne", autoPopulateRestaurant);
+restaurantSchema
+  .pre("findOne", autoPopulateRestaurant)
+  .pre("find", autoPopulateRestaurant);
 
-// restaurantSchema.index({
-//   name: "text",
-//   "address.longitude": 1,
-//   "address.latitude": 1,
-// });
+restaurantSchema.index({
+  "address.location": "2dsphere",
+});
 
 const Restaurants = model<IRestaurants & Document>(
   "restaurants",
