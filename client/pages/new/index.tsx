@@ -5,6 +5,8 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { instance } from "../../services/api";
 import LoaderSpinner from "../../components/LoaderSpinner";
+import { IRestaurants } from "../../interfaces/restaurants";
+import Link from "next/link";
 
 const ManageShop = () => {
   const {
@@ -14,10 +16,16 @@ const ManageShop = () => {
   } = useForm();
 
   const [loading, setLoading] = useState<Boolean>(false);
+  const [created, setCreated] = useState<Boolean>(false);
+  const [newRest, setNewRest] = useState<IRestaurants | null>();
 
   const onSubmit: SubmitHandler<any> = (data) => {
     setLoading(true);
-    instance.post("/restaurants/new", data).then(() => setLoading(false));
+    instance.post("/restaurants/new", data).then((res: any) => {
+      setNewRest(res.data);
+      setLoading(false);
+      setCreated(true);
+    });
   };
   return (
     <Col className="p-8 items-center w-full">
@@ -64,6 +72,16 @@ const ManageShop = () => {
           {loading ? <LoaderSpinner /> : "Submit"}
         </Button>
       </Col>
+      {created && newRest && newRest._id && (
+        <Col className="mt-4 space-y-2 items-center">
+          <p>Restaurant created</p>
+          <Link href={`/restaurant/${newRest._id}`} passHref>
+            <a>
+              <Button color="green">Update / View</Button>
+            </a>
+          </Link>
+        </Col>
+      )}
     </Col>
   );
 };

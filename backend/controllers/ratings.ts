@@ -21,7 +21,7 @@ router.post(
         new: true,
       }
     );
-
+    global.io.emit("rated-restaurant", updatedRatings);
     res.send(updatedRatings);
   }
 );
@@ -45,6 +45,7 @@ router.post(
         new: true,
       }
     );
+    global.io.emit("rated-food", Date.now());
 
     res.send(updatedRatings);
   }

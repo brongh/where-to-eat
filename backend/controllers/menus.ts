@@ -18,7 +18,7 @@ router.post("/add", async (req: Request, res: Response, next: NextFunction) => {
       new: true,
     }
   );
-
+  global.io.emit("updated-menu", Date.now());
   res.send(updatedMenu);
 });
 
